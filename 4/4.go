@@ -101,6 +101,29 @@ func search(x, y int, d [][]byte) int {
 	return found
 }
 
+// Search for X-MAS
+func searchX(x, y int, d [][]byte) int {
+	mx := len(d)
+	my := len(d[x])
+
+	if x == 0 || x == mx-1 || y == 0 || y == my-1 {
+		return 0
+	}
+
+	found := 0
+
+	// Search top left and bottom right
+	tlbr := []byte{d[x-1][y-1], d[x+1][y+1]}
+	// Search top right to bottom left
+	trbl := []byte{d[x+1][y-1], d[x-1][y+1]}
+
+	if (string(tlbr) == "MS" || string(tlbr) == "SM") && (string(trbl) == "MS" || string(trbl) == "SM") {
+		found++
+	}
+
+	return found
+}
+
 func p1() {
 	d := readInput()
 
@@ -115,10 +138,27 @@ func p1() {
 			}
 		}
 	}
+	fmt.Println(count)
+}
 
+func p2() {
+	d := readInput()
+
+	count := 0
+	for x, r := range d {
+		for y, c := range r {
+			if c == byte('A') {
+				found := searchX(x, y, d)
+				if found > 0 {
+					count += found
+				}
+			}
+		}
+	}
 	fmt.Println(count)
 }
 
 func main() {
 	p1()
+	p2()
 }
